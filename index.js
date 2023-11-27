@@ -36,22 +36,30 @@ app.post('/upload', upload.none(), (req, res) => {
 });
 
 app.get('/notes/:note_name', (req, res) => {
-  const note = notes[req.params.note_name];
+  const noteName = req.params.note_name;
+  const note = notes[noteName];
+
   if (!note) {
     return res.status(404).send('Note not found.');
   }
+
   res.send(note.text);
 });
 
+
 app.put('/notes/:note_name', (req, res) => {
-  const note = notes[req.params.note_name];
-  if (!note) {
+  const noteName = req.params.note_name;
+  const newText = req.body.text;
+
+  if (!notes[noteName]) {
     return res.status(404).send('Note not found.');
   }
-  note.text = req.body.text;
+
+  notes[noteName].text = newText;
   fs.writeFileSync('notes.json', JSON.stringify(notes));
   res.send('Note updated.');
 });
+
 
 app.delete('/notes/:note_name', (req, res) => {
   if (!notes[req.params.note_name]) {
@@ -63,7 +71,7 @@ app.delete('/notes/:note_name', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port http://localhost:${port}/UploadForm.html`);
 });
 
 
